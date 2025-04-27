@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">Fake News Detector</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Detect Fake News</h1>
+        <p>Enter a news article's text or URL to analyze its authenticity.</p>
+        <form id="predict-form">
+            <label for="input-type">Select Input Type:</label>
+            <select id="input-type" name="input-type">
+                <option value="text">Text</option>
+                <option value="url">URL</option>
+            </select>
+            <br><br>
+            <textarea id="input-text" name="input" rows="10" placeholder="Paste the news article text here..." style="display: block;"></textarea>
+            <input type="url" id="input-url" name="input" placeholder="Enter a news article URL (e.g., https://example.com)" style="display: none;">
+            <button type="submit">Analyze</button>
+        </form>
+        <div id="loading">Analyzing...</div>
+        <div id="result" class="result-card">
+            <h3>Analysis Result</h3>
+            <p id="result-text"></p>
+            <p id="confidence"></p>
+        </div>
+        <button id="feedback-btn" style="display: none;">Provide Feedback</button>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h3>Feedback</h3>
+            <textarea id="feedback-text" rows="5" placeholder="Share your thoughts..."></textarea>
+            <button id="submit-feedback">Submit</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Fake News Detector. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
