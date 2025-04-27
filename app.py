@@ -2,8 +2,15 @@ from flask import Flask, request, jsonify, render_template
 import joblib
 from utils import preprocess_text
 import newspaper
+import smtplib
+from email.mime.text import MIMEText
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+# Load environment variables
+load_dotenv()
 
 # Load model and vectorizer
 model = joblib.load('model/model.pkl')
@@ -17,8 +24,38 @@ def home():
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        message = data.get('message')
+
+        if not all([name, email, message]):
+            return jsonify({'success': False, 'message': 'All fields are required.'}), 400
+
+        # Email configuration
+        sender_email = os.getenv('EMAIL_ADDRESS')
+        sender_password = os.getenv('EMAIL_PASSWORD')
+        recipient_email = 'rkrajputrks@gmail.com'
+
+        # Compose email
+        email_body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+        msg = MIMEText(email_body)
+        msg['Subject'] = 'New Contact Form Submission - Fake News Detector'
+        msg['From'] = sender_email
+        msg['To'] = recipient_email
+
+        try:
+            # Send email via Gmail SMTP
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                server.login(sender_email, sender_password)
+                server.sendmail(sender_email, recipient_email, msg.as_string())
+            return jsonify({'success': True, 'message': 'Message sent successfully!'})
+        except Exception as e:
+            return jsonify({'success': False, 'message': 'Failed to send message. Please try again later.'}), 500
+
     return render_template('contact.html')
 
 @app.route('/predict', methods=['POST'])
