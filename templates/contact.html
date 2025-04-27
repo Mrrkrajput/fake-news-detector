@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Fake News Detector</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">Fake News Detector</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contact Content -->
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>We value your feedback and inquiries. Reach out to us for support, collaboration opportunities, or to share your thoughts on improving the Fake News Detector.</p>
+        <div class="contact-info">
+            <h2>Contact Information</h2>
+            <p><strong>Phone:</strong> +91 9162170040</p>
+            <p><strong>Email:</strong> <a href="mailto:rkrajputrks@gmail.com">rkrajputrks@gmail.com</a></p>
+        </div>
+        <h2>Send a Message</h2>
+        <form id="contact-form" method="POST" action="/contact">
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <div id="contact-message"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Fake News Detector. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = this;
+            const data = {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+
+            fetch('/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('contact-message').innerText = data.message;
+                if (data.success) {
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                document.getElementById('contact-message').innerText = 'Error: Failed to send message.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
